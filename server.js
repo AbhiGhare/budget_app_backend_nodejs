@@ -6,22 +6,28 @@ require("dotenv").config();
 const app = express();
 
 // ✅ Allow all CORS requests
-const allowedOrigins = ["*"];
+const allowedOrigins = [
+  "http://localhost:4200", // Angular dev
+  "https://your-frontend-domain.com", // Vercel / live frontend
+];
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // Specify allowed methods
-  allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
-  credentials: true, // Allow sending cookies/auth headers
-};
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
-app.use(cors(corsOptions));
+
+// app.use(cors(corsOptions));
 // app.use(cors());
 app.use(express.json());
 

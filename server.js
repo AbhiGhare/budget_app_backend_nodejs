@@ -19,6 +19,15 @@ app.use("/api/expenses", require("./routes/expense.routes"));
 app.use("/api/reports", require("./routes/report")); // ✅ NEW
 app.use("/api/admin", require("./routes/admin"));
 
+// ✅ Add this "live" route here
+app.get("/", (req, res) => {
+  res.send({
+    message: "🚀 Backend is live and running successfully!",
+    timestamp: new Date(),
+    status: "OK"
+  });
+});
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));

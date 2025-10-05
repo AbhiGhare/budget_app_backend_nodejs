@@ -5,36 +5,12 @@ require("dotenv").config();
 
 const app = express();
 
-// ✅ Configure CORS
-const corsOptions = {
-  origin: [
-    "http://localhost:4200",           // local frontend
-    "https://your-frontend.vercel.app" // deployed frontend
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true,
-};
-app.use(cors(corsOptions));
-
-
-// ✅ CORS middleware (works for serverless / Vercel)
-app.use((req, res, next) => {
-  // Allow all origins (for testing)
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-  );
-
-  // Handle preflight requests
-  if (req.method === "OPTIONS") return res.sendStatus(200);
-
-  next();
-});
+// ✅ Allow all CORS requests
+app.use(cors({
+  origin: "*",               // allow all origins
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 // app.use(cors());
 app.use(express.json());

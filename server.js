@@ -8,7 +8,7 @@ const app = express();
 // ✅ Allow all CORS requests
 const allowedOrigins = [
   "http://localhost:4200", // Angular dev
-  "https://your-frontend-domain.com", // Vercel / live frontend
+  "https://budget-app-frontend-puce.vercel.app", // Vercel / live frontend
 ];
 
 app.use(

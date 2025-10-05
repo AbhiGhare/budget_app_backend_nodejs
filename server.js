@@ -6,7 +6,7 @@ require("dotenv").config();
 const app = express();
 
 // ✅ Allow all CORS requests
-const allowedOrigins = ["http://localhost:4200"];
+const allowedOrigins = ["*"];
 
 const corsOptions = {
   origin: function (origin, callback) {

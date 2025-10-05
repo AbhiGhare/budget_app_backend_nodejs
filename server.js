@@ -6,15 +6,33 @@ require("dotenv").config();
 const app = express();
 
 // ✅ Allow all CORS requests
-app.use(cors({  origin: ["http://localhost:4200"], methods: ["GET","POST","PUT","DELETE","OPTIONS"], allowedHeaders: ["Content-Type","Authorization"] }));
+const allowedOrigins = ["http://localhost:4200"];
 
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // Specify allowed methods
+  allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
+  credentials: true, // Allow sending cookies/auth headers
+};
+
+app.use(cors(corsOptions));
 // app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("✅ MongoDB Connected"))
-  .catch(err => console.error(err));
+  .catch((err) => console.error(err));
 
 // Routes
 app.use("/api/auth", require("./routes/auth.routes"));
@@ -28,10 +46,11 @@ app.get("/", (req, res) => {
   res.send({
     message: "🚀 Backend is live and running successfully!",
     timestamp: new Date(),
-    status: "OK"
+    status: "OK",
   });
 });
 
-
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+app.listen(PORT, () =>
+  console.log(`🚀 Server running on http://localhost:${PORT}`)
+);
